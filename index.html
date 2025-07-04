@@ -40,9 +40,9 @@
         <p>This page presents a basic spectral analysis of a short speech signal (e.g., vowel "ah") using fundamental frequency estimation methods, such as autocorrelation.</p>
     </div>
 
-    <div class="section">
+        <div class="section">
         <h2>🎧 Audio Sample</h2>
-        <p>Original 20ms frame extracted from the speech signal:</p>
+        <p>Original speech signal:</p>
         <audio controls>
             <source src="A_PM66PSO5_a_190303153700.wav" type="audio/wav">
             Your browser does not support the audio element.
@@ -51,21 +51,42 @@
 
     <div class="section">
         <h2>📈 Waveform of the Frame</h2>
-        <img src="images/frame_waveform.png" alt="Waveform of 20ms speech frame">
+        <p>The figure below shows a 20 ms frame extracted from the original speech signal. The frame starts at 1 second to avoid silent or nontonal regions.</p>
+        <img src="extracted20ms.png" alt="Waveform of 20ms speech frame">
     </div>
 
     <div class="section">
-        <h2>⚙️ Method: Autocorrelation-Based Estimation</h2>
-        <p>We use the autocorrelation method to estimate the fundamental frequency <code>f<sub>0</sub></code>. The peak lag is identified from the autocorrelation function in a plausible pitch range (e.g., 50–400 Hz).</p>
-        <pre><code>f0 = fs / lag;
-w0 = 2 * pi * f0;</code></pre>
+        <h2>🧭 Frame Location in Full Signal</h2>
+        <p>The red segment in the following figure indicates where the 20 ms frame appears within the full speech signal waveform.</p>
+        <img src="fullaudio.png" alt="Full waveform with 20ms frame highlighted">
     </div>
 
     <div class="section">
-        <h2>📊 Estimated Result</h2>
-        <p><strong>Estimated f<sub>0</sub></strong>: <code>125.6 Hz</code></p>
-        <p><strong>Estimated &omega;<sub>0</sub></strong>: <code>789.0 rad/s</code></p>
-    </div>
+    <h2>🧮 Frequency Estimation (Autocorrelation Method)</h2>
+    <p>To estimate the fundamental frequency <code>w₀</code> of the extracted speech frame, we first use a classical method based on time-domain autocorrelation. This is mainly used for comparison purposes. The code preprocesses the frame by removing its DC component, computes the normalized autocorrelation, and identifies the dominant pitch period within the typical human voice range.</p>
+    <pre><code>Estimated f0: 98.16 Hz
+Estimated w0: 616.75 rad/s</code></pre>
+</div>
+
+<div class="section">
+    <h2>🎯 Harmonic Least-Squares (LS) Residual Method</h2>
+    <p>For more accurate estimation of <code>w₀</code>, we use the Harmonic LS residual minimization method. This method assumes the signal is a sum of harmonics and estimates the best-fitting angular frequency by minimizing the residual energy.</p>
+
+    <ul>
+        <li>Number of harmonics: K = 8</li>
+        <li>Candidate frequency range: 50 Hz – 500 Hz</li>
+        <li>Candidate resolution: M = 1000 points</li>
+    </ul>
+
+    <p>The optimal value of <code>f₀</code> is determined by finding the minimum of the residual curve.</p>
+    <pre><code>Estimated f0 = 98.20 Hz
+Estimated w0 = 617.00 rad/s</code></pre>
+
+    <h3>📉 Residual Curve</h3>
+    <p>The following figure shows the residual energy versus candidate frequencies. The red dot indicates the frequency with the minimum residual.</p>
+    <img src="bestf0.png" alt="Residual curve showing minimum at optimal f0">
+</div>
+
 
     <div class="section">
         <h2>🧠 Next Steps</h2>
