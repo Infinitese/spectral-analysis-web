@@ -61,26 +61,56 @@
         <img src="fullaudio.png" alt="Full waveform with 20ms frame highlighted">
     </div>
 
-    <div class="section">
-    <h2>🧮 Frequency Estimation (Autocorrelation Method)</h2>
-    <p>To estimate the fundamental frequency <code>w₀</code> of the extracted speech frame, we first use a classical method based on time-domain autocorrelation. This is mainly used for comparison purposes. The code preprocesses the frame by removing its DC component, computes the normalized autocorrelation, and identifies the dominant pitch period within the typical human voice range.</p>
-    <pre><code>Estimated f0: 98.16 Hz
-Estimated w0: 616.75 rad/s</code></pre>
+    <!-- ────────── Fundamental-Frequency Estimation ────────── -->
+<div class="section">
+  <h2>🧮 Step 1 — Coarse Harmonic Residual Scan</h2>
+  <p>
+    We first carry out a <strong>grid scan</strong> over the range
+    <strong>50 Hz to 400 Hz</strong> using <em>500 equally-spaced
+    candidates</em>.  
+    For each trial <code>f₀</code> we build the
+    <code>U(t,k)</code> matrix with <code>K = 8</code> harmonics,
+    solve a least-squares amplitude vector
+    <code>a = U\;x</code>, and store the residual energy
+    <code>‖x − U a‖²</code>.
+  </p>
+
+  <p>The <strong>global minimum</strong> of the residual curve
+     provides a robust starting point:</p>
+  <pre><code>Coarse-scan f0  = 98.20 Hz
+Coarse-scan w0  = 617.00 rad/s</code></pre>
+  <p>(red dot in the residual-versus-frequency plot)</p>
 </div>
 
 <div class="section">
-    <h2>🎯 Harmonic Least-Squares (LS) Residual Method</h2>
-    <p>For more accurate estimation of <code>w₀</code>, we use the Harmonic LS residual minimization method. This method assumes the signal is a sum of harmonics and estimates the best-fitting angular frequency by minimizing the residual energy.</p>
+  <h2>🎯 Step 2 — Adaptive Harmonic LS Refinement</h2>
+  <p>
+    We then refine the estimate with
+    <code>estimate_omega0</code>
+    <span class="ref">(Elvander &amp; Jakobsson, T-SP 2020)</span>,
+    which iteratively shrinks the search window until its width
+    drops below <code>10<sup>-12</sup>&nbsp;rad/s</code>.
+    The routine minimises the same least-squares cost but on an
+    <em>adaptive grid</em>.
+  </p>
 
-    <ul>
-        <li>Number of harmonics: K = 8</li>
-        <li>Candidate frequency range: 50 Hz – 500 Hz</li>
-        <li>Candidate resolution: M = 1000 points</li>
-    </ul>
+  <ul>
+    <li>Harmonic order: <strong>K = 8</strong></li>
+    <li>Initial grid: <code>200</code> points → 50-point local refinements</li>
+    <li>Cost metric: <code>‖x − U(ω) (U(ω)\x)‖²</code></li>
+  </ul>
 
-    <p>The optimal value of <code>f₀</code> is determined by finding the minimum of the residual curve.</p>
-    <pre><code>Estimated f0 = 98.20 Hz
-Estimated w0 = 617.00 rad/s</code></pre>
+  <p><strong>Final estimates</strong>:</p>
+  <pre><code>Estimated f0 = 98.205 Hz
+Estimated w0 = 617.043 rad/s</code></pre>
+
+  <p>
+    These refined values of <code>f₀</code> / <code>w₀</code> are used
+    as the baseline for the subsequent OMT-prior
+    inharmonicity analysis.
+  </p>
+</div>
+
 
     <h3>📉 Residual Curve</h3>
     <p>The following figure shows the residual energy versus candidate frequencies. The red dot indicates the frequency with the minimum residual.</p>
