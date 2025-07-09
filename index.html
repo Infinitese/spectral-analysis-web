@@ -162,7 +162,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   </p>
 
   <!-- 3-B  COST FUNCTION -->
-  <h3>3-B Cost function</h3>
+  <h3> Cost function</h3>
   <p class="formula">
     <kbd>J(ω̂,a) = N · log ‖y − A(ω̂)a‖²
        + (1&nbsp;/&nbsp;2σ<sub>Δ</sub>²) · Σ<sub>k</sub>
@@ -185,7 +185,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   </p>
 
   <!-- 3-C  OPTIMISATION PROCEDURE -->
-  <h3>3-C Optimisation procedure</h3>
+  <h3> Optimisation procedure</h3>
   <ol>
     <li><b>Initial guess</b>: perfectly harmonic grid
         <code>ω̂<sub>k,0</sub> = k·ω₀<sub>LS</sub></code>.</li>
@@ -198,7 +198,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   </ol>
 
   <!-- 3-D  NUMERIC RESULTS (table stays the same) -->
-  <h3>3-D Numerical results</h3>
+  <h3> Numerical results</h3>
   <p>
     <strong>f<sub>0,LS</sub> = 98.205 Hz</strong> |
     <strong>f<sub>0,OMT</sub> = 98.181 Hz</strong>
@@ -226,7 +226,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   </table>
 
   <!-- 3-E  DERIVED METRICS / PLOT -->
-  <h3>3-E Derived metrics</h3>
+  <h3> Derived metrics</h3>
   <ul>
     <li><b>RMS jitter</b>: 2.80 Hz (2.9 % of f₀)</li>
     <li><b>Linear-approx B</b>: −1.76 × 10<sup>−2</sup></li>
@@ -234,7 +234,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   </ul>
 
   <figure>
-    <img src="img/delta_stem.png" alt="Stem plot of Δ_k (Hz)">
+    <img src="deviation.png" alt="Stem plot of Δ_k (Hz)">
     <figcaption>
       Δ<sub>k</sub> stem plot: peak-to-peak ±4 Hz, alternating sign —
       typical of short-term jitter rather than physical string inharmonicity.
@@ -243,22 +243,7 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
 </section>
 
 
-  <!-- derived metrics -->
-  <h3>📈 Derived frame metrics</h3>
-  <ul>
-    <li><strong>RMS jitter</strong>: 2.80 Hz (2.9 % of f₀)</li>
-    <li><strong>Linear-approx B</strong>: −1.76 × 10<sup>−2</sup></li>
-    <li><strong>OMT cost</strong>: 6.10 × 10<sup>2</sup></li>
-  </ul>
 
-  <figure>
-    <img src="img/delta_stem.png" alt="Stem plot of Δ_k (Hz)" />
-    <figcaption>
-      Alternating signs and ±4 Hz span indicate mainly short-term jitter;
-      fitted B is small and negative.
-    </figcaption>
-  </figure>
-</section>
 
 </body>
 </html>
