@@ -117,14 +117,76 @@ Estimated w0 = 617.043 rad/s</code></pre>
     <img src="bestf0.png" alt="Residual curve showing minimum at optimal f0">
 </div>
 
+<!-- ────────── Inharmonicity Analysis ────────── -->
+<div class="section">
+  <h2>🎻 Step&nbsp;3 — OMT-prior Joint Estimation of&nbsp;Δ<sub>k</sub></h2>
 
-    <div class="section">
-        <h2>🧠 Next Steps</h2>
-        <ul>
-            <li>Compare with least-squares method</li>
-            <li>Visualize spectrogram</li>
-            <li>Embed code snippets and notebook outputs</li>
-        </ul>
-    </div>
+  <p>
+    After the harmonic LS refinement we allow every harmonic to deviate
+    slightly from the exact integer grid
+    <code>k&nbsp;·&nbsp;ω₀</code>.  We adopt the
+    <strong>Optimal&nbsp;Mass&nbsp;Transport (OMT) prior</strong> 
+    <span class="ref">(Elvander&nbsp;&amp;&nbsp;Jakobsson&nbsp;2023)</span>,
+    which minimises
+  </p>
+
+  <p class="formula">
+    <em>data-fit&nbsp;cost</em>&nbsp;&plus;&nbsp;
+    <code>λ&nbsp;·&nbsp;∑<sub>k</sub>|a<sub>k</sub>|²&nbsp;Δ<sub>k</sub>²</code>,
+  </p>
+
+  <p>
+    where <code>Δ<sub>k</sub> = ω̂<sub>k</sub> − k&nbsp;ω₀</code>
+    and the weight&nbsp;<code>λ = 1/(2σ<sub>Δ</sub><sup>2</sup>)</code>
+    controls the allowed jitter.  Here we set
+    <code>σ<sub>Δ</sub> = 2&nbsp;Hz</code> (≈ one semitone cent).
+    The initial frequency vector is the perfectly harmonic grid
+    <code>k&nbsp;·&nbsp;ω₀<sub>LS</sub></code>, which speeds up convergence.
+  </p>
+
+  <ul>
+    <li><strong>Harmonic order</strong>: K = 8</li>
+    <li><strong>Jitter prior</strong>: σ<sub>Δ</sub> = 2 Hz</li>
+    <li><strong>Solver</strong>: Nelder–Mead (<code>fminsearch</code>)</li>
+  </ul>
+
+  <h3>🔢  Numerical results</h3>
+  <pre><code>f0_LS  = 98.205 Hz
+f0_OMT = 98.181 Hz   (difference 0.025 Hz)
+------------------------------------------
+k |  ω̂<sub>k</sub> (Hz) |  k·f0_OMT (Hz) |  Δ<sub>k</sub> (Hz)
+--+----------------+------------------+-------------
+1 | 101.846 |  98.181 | +3.67
+2 | 194.872 | 196.362 | -1.50
+3 | 294.725 | 294.544 | +0.18
+4 | 390.122 | 392.725 | -2.60
+5 | 488.501 | 490.906 | -2.40
+6 | 590.860 | 589.087 | +1.78
+7 | 684.763 | 687.269 | -2.51
+8 | 786.328 | 785.450 | +0.88
+</code></pre>
+
+  <h3>📈  Derived frame metrics</h3>
+  <ul>
+    <li><strong>RMS&nbsp;jitter</strong>: 2.80 Hz (2.9 % of&nbsp;f₀)</li>
+    <li><strong>Linear-approx B</strong>: −1.76 × 10<sup>−2</sup></li>
+    <li><strong>OMT cost</strong>: 6.10 × 10<sup>2</sup></li>
+  </ul>
+
+  <p>
+    The stem plot below visualises the eight&nbsp;Δ<sub>k</sub> values.
+    Alternating signs and a peak-to-peak span of ±4 Hz indicate that most
+    deviation is short-term <em>jitter</em>; the fitted B-coefficient is
+    small and negative, consistent with negligible physical
+    inharmonicity and mild formant pulling.
+  </p>
+
+  <figure>
+    <img src="img/delta_stem.png" alt="Stem plot of Δ_k (Hz)" />
+    <figcaption>Δ<sub>k</sub> stem plot produced by the MATLAB
+      <code>stem</code> command.</figcaption>
+  </figure>
+</div>
+
 </body>
 </html>
