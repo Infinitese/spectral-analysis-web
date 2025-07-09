@@ -145,58 +145,72 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
 
 
 <!-- 4. Inharmonicity analysis ----------------------------------------- -->
-<!--  STEP 3  ────────────────────────────────────────── -->
+<!--  STEP 3 — OMT-prior Joint Estimation of Δk  -->
 <section class="section">
-  <h2>🎻 Step&nbsp;3 — OMT-prior Joint Estimation&nbsp;of Δ<sub>k</sub></h2>
+  <h2>🎻 Step&nbsp;3 — OMT-prior Joint Estimation&nbsp;of&nbsp;Δ<sub>k</sub></h2>
 
+  <!-- 3-A  WHY -->
   <p>
-    Real speech is never perfectly harmonic: each partial can shift by a
-    few&nbsp;hertz (<em>jitter</em>, <em>formant-pulling</em>, etc.).
-    We therefore estimate all sinusoidal frequencies
-    <code>ω̂<sub>k</sub></code> <em>and</em> the best overall
-    pitch <code>ω₀</code> by minimising
+    A real voice is never perfectly harmonic: every partial can drift
+    a few hertz due to <em>jitter</em>, vocal-tract interaction or
+    measurement noise.  
+    We therefore estimate <strong>all</strong> sinusoidal frequencies
+    <code>ω̂<sub>k</sub></code> <em>and</em> the best global pitch
+    <code>ω₀</code> in a single optimisation, using the
+    <strong>Optimal&nbsp;Mass&nbsp;Transport&nbsp;(OMT) prior</strong>
+    proposed by Elvander&nbsp;&amp;&nbsp;Jakobsson&nbsp;(2023).
   </p>
 
+  <!-- 3-B  COST FUNCTION -->
+  <h3>3-B Cost function</h3>
   <p class="formula">
-    log-likelihood&nbsp;︵data︶ &nbsp;+&nbsp;
-    <code>λ&nbsp;·&nbsp;∑<sub>k</sub>|a<sub>k</sub>|² Δ<sub>k</sub>²</code>,
+    <kbd>J(ω̂,a) = N · log ‖y − A(ω̂)a‖²
+       + (1&nbsp;/&nbsp;2σ<sub>Δ</sub>²) · Σ<sub>k</sub>
+         |a<sub>k</sub>|² (ω̂<sub>k</sub> − kω₀)²</kbd>
   </p>
-
-  <p>
-    where <code>Δ<sub>k</sub> = ω̂<sub>k</sub> − k ω₀</code>.
-    The second term is the
-    <strong>Optimal Mass Transport (OMT) prior</strong>:
-    each harmonic (mass |a<sub>k</sub>|²) is “transported” to its
-    integer grid position at a quadratic cost.
-  </p>
-
-  <h3>Algorithm details</h3>
   <ul>
-    <li><strong>σ<sub>Δ</sub> = 2 Hz</strong> ⇒ λ = 1 ⁄ (2σ<sub>Δ</sub>²)</li>
-    <li><strong>Initial frequencies</strong>:
-        the perfectly harmonic grid k·ω₀<sub>LS</sub></li>
-    <li><strong>Optimiser</strong>:
-        Nelder–Mead over&nbsp;3K parameters
-        <code>[ω̂, Re{a}, Im{a}]</code></li>
+    <li><code>A(ω̂)</code> — N × K harmonic matrix
+        <code>e<sup>j k ω̂ t</sup></code></li>
+    <li><code>a</code> — complex amplitudes (optimised together)</li>
+    <li><code>ω₀&nbsp;≡&nbsp;ω₀(ω̂,a)</code>  
+        &nbsp;= Σ|a<sub>k</sub>|² ω̂<sub>k</sub> /
+        Σ|a<sub>k</sub>|² k² &nbsp;<!-- matches your omega0_func --></li>
+    <li><code>σ<sub>Δ</sub> = 2 Hz</code> ⇒
+        <code>λ = 1 / (2σ<sub>Δ</sub>²)</code></li>
   </ul>
-
-  <!-- numeric results already present below; keep them -->
-</section>
-
-
-  <!-- numeric results table -->
-  <h3>🔢 Numerical results</h3>
   <p>
-    <strong>f<sub>0,LS</sub> = 98.205 Hz</strong>  | 
+    The first term favours a close fit to the waveform,  
+    the second pulls each partial toward its integer grid position
+    <code>k·ω₀</code> with a quadratic “transport” cost.
+  </p>
+
+  <!-- 3-C  OPTIMISATION PROCEDURE -->
+  <h3>3-C Optimisation procedure</h3>
+  <ol>
+    <li><b>Initial guess</b>: perfectly harmonic grid
+        <code>ω̂<sub>k,0</sub> = k·ω₀<sub>LS</sub></code>.</li>
+    <li><b>Parameter vector</b>:
+        <code>[ ω̂<sub>1:K</sub>, Re{a}<sub>1:K</sub>,
+                Im{a}<sub>1:K</sub> ] → 3K&nbsp;dims</code>.</li>
+    <li><b>Solver</b>: Nelder–Mead
+        (<code>fminsearch</code>, tol = 10<sup>-10</sup>).  
+        Converges in&nbsp;≈ 30–50 iterations for a 20 ms frame.</li>
+  </ol>
+
+  <!-- 3-D  NUMERIC RESULTS (table stays the same) -->
+  <h3>3-D Numerical results</h3>
+  <p>
+    <strong>f<sub>0,LS</sub> = 98.205 Hz</strong> |
     <strong>f<sub>0,OMT</sub> = 98.181 Hz</strong>
-    (<em>diff&nbsp;0.025 Hz</em>)
+    (<em>difference 0.025 Hz</em>)
   </p>
 
   <table class="num-table">
     <thead>
       <tr>
         <th>k</th><th>ω̂<sub>k</sub> (Hz)</th>
-        <th>k·f<sub>0,OMT</sub> (Hz)</th><th>Δ<sub>k</sub> (Hz)</th>
+        <th>k·f<sub>0,OMT</sub> (Hz)</th>
+        <th>Δ<sub>k</sub> (Hz)</th>
       </tr>
     </thead>
     <tbody>
@@ -210,6 +224,24 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
       <tr><td>8</td><td>786.328</td><td>785.450</td><td>+0.888</td></tr>
     </tbody>
   </table>
+
+  <!-- 3-E  DERIVED METRICS / PLOT -->
+  <h3>3-E Derived metrics</h3>
+  <ul>
+    <li><b>RMS jitter</b>: 2.80 Hz (2.9 % of f₀)</li>
+    <li><b>Linear-approx B</b>: −1.76 × 10<sup>−2</sup></li>
+    <li><b>OMT cost</b>: 6.10 × 10<sup>2</sup></li>
+  </ul>
+
+  <figure>
+    <img src="img/delta_stem.png" alt="Stem plot of Δ_k (Hz)">
+    <figcaption>
+      Δ<sub>k</sub> stem plot: peak-to-peak ±4 Hz, alternating sign —
+      typical of short-term jitter rather than physical string inharmonicity.
+    </figcaption>
+  </figure>
+</section>
+
 
   <!-- derived metrics -->
   <h3>📈 Derived frame metrics</h3>
