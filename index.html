@@ -1,231 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Spectral Analysis Project</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 2rem;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        audio {
-            margin-top: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        img {
-            max-width: 600px;
-            border: 1px solid #ccc;
-            margin-bottom: 1.5rem;
-        }
-        .section {
-            margin-bottom: 2rem;
-        }
-        code {
-            background-color: #eee;
-            padding: 2px 4px;
-            font-size: 90%;
-        }
-    </style>
+<meta charset="UTF-8" />
+<title>Spectral Analysis Project</title>
+
+<!-- ───── Global Styles ───── -->
+<style>
+  :root {
+    --bg:      #f9f9f9;
+    --fg:      #333;
+    --accent:  #2c3e50;
+    --code-bg: #eee;
+    --border:  #bbb;
+  }
+
+  /* base */
+  body         { font-family: Arial, sans-serif; background: var(--bg); color: var(--fg); margin: 2rem; line-height: 1.6; }
+  h1, h2, h3   { color: var(--accent); margin-top: 1.4rem; margin-bottom: .6rem; }
+  h1           { font-size: 2rem; }
+  h2           { font-size: 1.4rem; }
+  h3           { font-size: 1.15rem; }
+  p            { margin: .5rem 0 1rem; }
+  .section     { margin-bottom: 2.2rem; }
+  code, pre    { background: var(--code-bg); font-family: "Courier New", monospace; }
+  code         { padding: 2px 4px; font-size: 90%; border-radius: 4px; }
+  pre          { padding: .75rem 1rem; overflow-x: auto; border-radius: 6px; }
+
+  /* media */
+  img          { max-width: 620px; border: 1px solid #ccc; margin-bottom: 1.2rem; }
+  audio        { margin: .3rem 0 1.2rem; width: 100%; max-width: 400px; }
+
+  /* numeric table */
+  .num-table      { border-collapse: collapse; margin: .5rem 0 1.2rem; }
+  .num-table th,
+  .num-table td   { border: 1px solid var(--border); padding: .25rem .6rem; text-align: right; }
+  .num-table th   { background: #f2f2f2; }
+  .num-table td:first-child,
+  .num-table th:first-child { text-align: center; }
+
+  /* simple call-outs */
+  .formula    { margin: .6rem 0 .8rem; font-style: italic; }
+  figure      { margin: .8rem 0 1.6rem; text-align: center; }
+  figcaption  { font-size: 0.9rem; color: #666; margin-top: .4rem; }
+</style>
 </head>
+
 <body>
-    <h1>Spectral Analysis Project</h1>
+<h1>Spectral Analysis Project</h1>
 
-    <div class="section">
-        <h2>🔍 Project Overview</h2>
-        <p>This page presents a basic spectral analysis of a short speech signal (e.g., vowel "ah") using fundamental frequency estimation methods, such as autocorrelation.</p>
-    </div>
+<!-- 0. Overview -------------------------------------------------------- -->
+<section class="section">
+  <h2>🔍 Project Overview</h2>
+  <p>
+    This page demonstrates a small-scale spectral analysis of a sustained
+    vowel (<em>“ah”</em>).  We estimate the fundamental frequency
+    (<code>f₀</code>) and measure harmonic inharmonicity
+    (<code>Δ<sub>k</sub></code>) frame-by-frame.
+  </p>
+</section>
 
-        <div class="section">
-        <h2>🎧 Audio Sample</h2>
-        <p>Original speech signal:</p>
-        <audio controls>
-            <source src="A_PM66PSO5_a_190303153700.wav" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
+<!-- 1. Audio ----------------------------------------------------------- -->
+<section class="section">
+  <h2>🎧 Audio Sample</h2>
+  <audio controls>
+    <source src="A_PM66PSO5_a_190303153700.wav" type="audio/wav" />
+    Your browser does not support the audio element.
+  </audio>
+</section>
 
-    <div class="section">
-        <h2>📈 Waveform of the Frame</h2>
-        <p>The figure below shows a 20 ms frame extracted from the original speech signal. The frame starts at 1 second to avoid silent or nontonal regions.</p>
-        <img src="extracted20ms.png" alt="Waveform of 20ms speech frame">
-    </div>
+<!-- 2. Waveforms ------------------------------------------------------- -->
+<section class="section">
+  <h2>📈 Waveform of the 20 ms Frame</h2>
+  <p>The extracted 20 ms frame (starting at 1 s):</p>
+  <img src="extracted20ms.png" alt="20 ms frame waveform" />
+</section>
 
-    <div class="section">
-        <h2>🧭 Frame Location in Full Signal</h2>
-        <p>The red segment in the following figure indicates where the 20 ms frame appears within the full speech signal waveform.</p>
-        <img src="fullaudio.png" alt="Full waveform with 20ms frame highlighted">
-    </div>
+<section class="section">
+  <h2>🧭 Frame Position in the Full Signal</h2>
+  <p>The red segment shows where the 20 ms frame lies in the entire
+     speech recording:</p>
+  <img src="fullaudio.png" alt="Full waveform with highlighted frame" />
+</section>
 
-    <!-- ────────── Fundamental-Frequency Estimation ────────── -->
-<div class="section">
+<!-- 3. Fundamental-frequency estimation -------------------------------- -->
+<section class="section">
   <h2>🧮 Step 1 — Coarse Harmonic Residual Scan</h2>
   <p>
-    We first carry out a <strong>grid scan</strong> over the range
-    <strong>50 Hz to 400 Hz</strong> using <em>500 equally-spaced
-    candidates</em>.  
-    For each trial <code>f₀</code> we build the
-    <code>U(t,k)</code> matrix with <code>K = 8</code> harmonics,
-    solve a least-squares amplitude vector
-    <code>a = U\;x</code>, and store the residual energy
-    <code>‖x − U a‖²</code>.
+    A 500-point grid between <strong>50 Hz and 400 Hz</strong>
+    is evaluated.  For each candidate we build an
+    <code>8&nbsp;×&nbsp;N</code> harmonic matrix and record the residual
+    energy <code>‖x − U a‖²</code>.  The global minimum is:
   </p>
+  <pre><code>Coarse-scan f0 = 98.20 Hz
+Coarse-scan w0 = 617.00 rad/s</code></pre>
+  <p>(red marker in the residual plot below)</p>
 
-  <p>The <strong>global minimum</strong> of the residual curve
-     provides a robust starting point:</p>
-  <pre><code>Coarse-scan f0  = 98.20 Hz
-Coarse-scan w0  = 617.00 rad/s</code></pre>
-  <p>(red dot in the residual-versus-frequency plot)</p>
-</div>
+  <figure>
+    <img src="bestf0.png"   alt="Residual-energy curve" />
+    <figcaption>Residual energy over 500 f₀ candidates.</figcaption>
+  </figure>
+</section>
 
-<div class="section">
-  <h2>🎯 Step 2 — Adaptive Harmonic LS Refinement</h2>
+<section class="section">
+  <h2>🎯 Step 2 — Adaptive Harmonic-LS Refinement</h2>
   <p>
-    We then refine the estimate with
-    <code>estimate_omega0</code>
-    <span class="ref">(Elvander &amp; Jakobsson, T-SP 2020)</span>,
-    which iteratively shrinks the search window until its width
-    drops below <code>10<sup>-12</sup>&nbsp;rad/s</code>.
-    The routine minimises the same least-squares cost but on an
-    <em>adaptive grid</em>.
+    Using <code>estimate_omega0</code>
+    <span class="ref">(Elvander&nbsp;&amp;&nbsp;Jakobsson&nbsp;2020)</span>,
+    the search window is iteratively narrowed until its width falls
+    below <code>10⁻¹² rad/s</code>.
   </p>
-
   <ul>
-    <li>Harmonic order: <strong>K = 8</strong></li>
-    <li>Initial grid: <code>200</code> points → 50-point local refinements</li>
-    <li>Cost metric: <code>‖x − U(ω) (U(ω)\x)‖²</code></li>
+    <li><strong>Harmonic order</strong>: K = 8</li>
+    <li><strong>Initial grid</strong>: 200 points → 50-point local refinements</li>
+    <li><strong>Cost metric</strong>: <code>‖x − U(ω)(U(ω)\x)‖²</code></li>
   </ul>
+  <pre><code>Refined f0 = 98.205 Hz
+Refined w0 = 617.043 rad/s</code></pre>
+</section>
 
-  <p><strong>Final estimates</strong>:</p>
-  <pre><code>Estimated f0 = 98.205 Hz
-Estimated w0 = 617.043 rad/s</code></pre>
-
-  <p>
-    These refined values of <code>f₀</code> / <code>w₀</code> are used
-    as the baseline for the subsequent OMT-prior
-    inharmonicity analysis.
-  </p>
-</div>
-
-
-    <h3>📉 Residual Curve</h3>
-    <p>The following figure shows the residual energy versus candidate frequencies. The red dot indicates the frequency with the minimum residual.</p>
-    <img src="bestf0.png" alt="Residual curve showing minimum at optimal f0">
-</div>
-
-<!-- ────────── Inharmonicity Analysis ────────── -->
-<div class="section">
-  <h2>🎻 Step&nbsp;3 — OMT-prior Joint Estimation of&nbsp;Δ<sub>k</sub></h2>
+<!-- 4. Inharmonicity analysis ----------------------------------------- -->
+<section class="section">
+  <h2>🎻 Step 3 — OMT-prior Joint Estimation of Δ<sub>k</sub></h2>
 
   <p>
-    After the harmonic LS refinement we allow every harmonic to deviate
-    slightly from the exact integer grid
-    <code>k&nbsp;·&nbsp;ω₀</code>.  We adopt the
-    <strong>Optimal&nbsp;Mass&nbsp;Transport (OMT) prior</strong> 
-    <span class="ref">(Elvander&nbsp;&amp;&nbsp;Jakobsson&nbsp;2023)</span>,
-    which minimises
+    Allow each harmonic to deviate from the exact grid
+    <code>k · ω₀</code>.
+    The <strong>Optimal Mass Transport&nbsp;(OMT) prior</strong>
+    minimises
   </p>
 
   <p class="formula">
-    <em>data-fit&nbsp;cost</em>&nbsp;&plus;&nbsp;
-    <code>λ&nbsp;·&nbsp;∑<sub>k</sub>|a<sub>k</sub>|²&nbsp;Δ<sub>k</sub>²</code>,
+    data-fit&nbsp;cost&nbsp; + 
+    <code>λ&nbsp;·&nbsp;∑<sub>k</sub>|a<sub>k</sub>|² Δ<sub>k</sub>²</code>,
   </p>
 
   <p>
-    where <code>Δ<sub>k</sub> = ω̂<sub>k</sub> − k&nbsp;ω₀</code>
-    and the weight&nbsp;<code>λ = 1/(2σ<sub>Δ</sub><sup>2</sup>)</code>
-    controls the allowed jitter.  Here we set
-    <code>σ<sub>Δ</sub> = 2&nbsp;Hz</code> (≈ one semitone cent).
-    The initial frequency vector is the perfectly harmonic grid
-    <code>k&nbsp;·&nbsp;ω₀<sub>LS</sub></code>, which speeds up convergence.
+    with <code>λ = 1 / (2σ<sub>Δ</sub>²)</code> and
+    <code>σ<sub>Δ</sub> = 2 Hz</code>.
+    The starting point is the perfectly harmonic grid
+    <code>k · ω₀<sub>LS</sub></code>.
   </p>
 
   <ul>
-    <li><strong>Harmonic order</strong>: K = 8</li>
+    <li><strong>Harmonic order</strong>: 8</li>
     <li><strong>Jitter prior</strong>: σ<sub>Δ</sub> = 2 Hz</li>
     <li><strong>Solver</strong>: Nelder–Mead (<code>fminsearch</code>)</li>
   </ul>
 
-  <h3>🔢  Numerical results</h3>
-  <pre><code>f0_LS  = 98.205 Hz
-f0_OMT = 98.181 Hz   (difference 0.025 Hz)
+  <!-- numeric results table -->
+  <h3>🔢 Numerical results</h3>
+  <p>
+    <strong>f<sub>0,LS</sub> = 98.205 Hz</strong>  | 
+    <strong>f<sub>0,OMT</sub> = 98.181 Hz</strong>
+    (<em>diff&nbsp;0.025 Hz</em>)
+  </p>
 
-      
-      <style>
-  .num-table {
-    border-collapse: collapse;
-    margin: 0.5rem 0 1rem;
-    font-family: "Courier New", monospace;   /* 保留等宽数字对齐 */
-  }
-  .num-table th,
-  .num-table td {
-    border: 1px solid #bbb;
-    padding: 0.25rem 0.5rem;
-    text-align: right;                       /* 数字右对齐 */
-  }
-  .num-table th {
-    background: #f2f2f2;
-  }
-  .num-table td:first-child,
-  .num-table th:first-child {
-    text-align: center;                      /* k 列居中 */
-  }
-</style>
+  <table class="num-table">
+    <thead>
+      <tr>
+        <th>k</th><th>ω̂<sub>k</sub> (Hz)</th>
+        <th>k·f<sub>0,OMT</sub> (Hz)</th><th>Δ<sub>k</sub> (Hz)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>101.846</td><td>98.181</td><td>+3.673</td></tr>
+      <tr><td>2</td><td>194.872</td><td>196.362</td><td>−1.496</td></tr>
+      <tr><td>3</td><td>294.725</td><td>294.544</td><td>+0.191</td></tr>
+      <tr><td>4</td><td>390.122</td><td>392.725</td><td>−2.600</td></tr>
+      <tr><td>5</td><td>488.501</td><td>490.906</td><td>−2.401</td></tr>
+      <tr><td>6</td><td>590.860</td><td>589.087</td><td>+1.780</td></tr>
+      <tr><td>7</td><td>684.763</td><td>687.269</td><td>−2.508</td></tr>
+      <tr><td>8</td><td>786.328</td><td>785.450</td><td>+0.888</td></tr>
+    </tbody>
+  </table>
 
-<!-- ───── Replace the old <pre> … </pre> block with this ───── -->
-<h3>🔢 Numerical results</h3>
-
-<p><strong>f<sub>0,LS</sub> = 98.205 Hz</strong> &nbsp;&nbsp;|&nbsp;&nbsp;
-   <strong>f<sub>0,OMT</sub> = 98.181 Hz</strong>
-   &nbsp; (difference 0.025 Hz)
-</p>
-
-<table class="num-table">
-  <thead>
-    <tr>
-      <th>k</th>
-      <th>ω̂<sub>k</sub> (Hz)</th>
-      <th>k·f<sub>0,OMT</sub> (Hz)</th>
-      <th>Δ<sub>k</sub> (Hz)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>1</td><td>101.846</td><td>98.181</td><td>+3.673</td></tr>
-    <tr><td>2</td><td>194.872</td><td>196.362</td><td>−1.496</td></tr>
-    <tr><td>3</td><td>294.725</td><td>294.544</td><td>+0.191</td></tr>
-    <tr><td>4</td><td>390.122</td><td>392.725</td><td>−2.600</td></tr>
-    <tr><td>5</td><td>488.501</td><td>490.906</td><td>−2.401</td></tr>
-    <tr><td>6</td><td>590.860</td><td>589.087</td><td>+1.780</td></tr>
-    <tr><td>7</td><td>684.763</td><td>687.269</td><td>−2.508</td></tr>
-    <tr><td>8</td><td>786.328</td><td>785.450</td><td>+0.888</td></tr>
-  </tbody>
-</table>
-
-  <h3>📈  Derived frame metrics</h3>
+  <!-- derived metrics -->
+  <h3>📈 Derived frame metrics</h3>
   <ul>
-    <li><strong>RMS&nbsp;jitter</strong>: 2.80 Hz (2.9 % of&nbsp;f₀)</li>
+    <li><strong>RMS jitter</strong>: 2.80 Hz (2.9 % of f₀)</li>
     <li><strong>Linear-approx B</strong>: −1.76 × 10<sup>−2</sup></li>
     <li><strong>OMT cost</strong>: 6.10 × 10<sup>2</sup></li>
   </ul>
 
-  <p>
-    The stem plot below visualises the eight&nbsp;Δ<sub>k</sub> values.
-    Alternating signs and a peak-to-peak span of ±4 Hz indicate that most
-    deviation is short-term <em>jitter</em>; the fitted B-coefficient is
-    small and negative, consistent with negligible physical
-    inharmonicity and mild formant pulling.
-  </p>
-
   <figure>
     <img src="img/delta_stem.png" alt="Stem plot of Δ_k (Hz)" />
-    <figcaption>Δ<sub>k</sub> stem plot produced by the MATLAB
-      <code>stem</code> command.</figcaption>
+    <figcaption>
+      Alternating signs and ±4 Hz span indicate mainly short-term jitter;
+      fitted B is small and negative.
+    </figcaption>
   </figure>
-</div>
+</section>
 
 </body>
 </html>
+
