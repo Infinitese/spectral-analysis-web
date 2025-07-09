@@ -153,18 +153,57 @@ Estimated w0 = 617.043 rad/s</code></pre>
   <h3>🔢  Numerical results</h3>
   <pre><code>f0_LS  = 98.205 Hz
 f0_OMT = 98.181 Hz   (difference 0.025 Hz)
-------------------------------------------
-k |  ω̂<sub>k</sub> (Hz) |  k·f0_OMT (Hz) |  Δ<sub>k</sub> (Hz)
---+----------------+------------------+-------------
-1 | 101.846 |  98.181 | +3.67
-2 | 194.872 | 196.362 | -1.50
-3 | 294.725 | 294.544 | +0.18
-4 | 390.122 | 392.725 | -2.60
-5 | 488.501 | 490.906 | -2.40
-6 | 590.860 | 589.087 | +1.78
-7 | 684.763 | 687.269 | -2.51
-8 | 786.328 | 785.450 | +0.88
-</code></pre>
+
+      
+      <style>
+  .num-table {
+    border-collapse: collapse;
+    margin: 0.5rem 0 1rem;
+    font-family: "Courier New", monospace;   /* 保留等宽数字对齐 */
+  }
+  .num-table th,
+  .num-table td {
+    border: 1px solid #bbb;
+    padding: 0.25rem 0.5rem;
+    text-align: right;                       /* 数字右对齐 */
+  }
+  .num-table th {
+    background: #f2f2f2;
+  }
+  .num-table td:first-child,
+  .num-table th:first-child {
+    text-align: center;                      /* k 列居中 */
+  }
+</style>
+
+<!-- ───── Replace the old <pre> … </pre> block with this ───── -->
+<h3>🔢 Numerical results</h3>
+
+<p><strong>f<sub>0,LS</sub> = 98.205 Hz</strong> &nbsp;&nbsp;|&nbsp;&nbsp;
+   <strong>f<sub>0,OMT</sub> = 98.181 Hz</strong>
+   &nbsp; (difference 0.025 Hz)
+</p>
+
+<table class="num-table">
+  <thead>
+    <tr>
+      <th>k</th>
+      <th>ω̂<sub>k</sub> (Hz)</th>
+      <th>k·f<sub>0,OMT</sub> (Hz)</th>
+      <th>Δ<sub>k</sub> (Hz)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>101.846</td><td>98.181</td><td>+3.673</td></tr>
+    <tr><td>2</td><td>194.872</td><td>196.362</td><td>−1.496</td></tr>
+    <tr><td>3</td><td>294.725</td><td>294.544</td><td>+0.191</td></tr>
+    <tr><td>4</td><td>390.122</td><td>392.725</td><td>−2.600</td></tr>
+    <tr><td>5</td><td>488.501</td><td>490.906</td><td>−2.401</td></tr>
+    <tr><td>6</td><td>590.860</td><td>589.087</td><td>+1.780</td></tr>
+    <tr><td>7</td><td>684.763</td><td>687.269</td><td>−2.508</td></tr>
+    <tr><td>8</td><td>786.328</td><td>785.450</td><td>+0.888</td></tr>
+  </tbody>
+</table>
 
   <h3>📈  Derived frame metrics</h3>
   <ul>
