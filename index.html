@@ -101,51 +101,88 @@ Coarse-scan w0 = 617.00 rad/s</code></pre>
   </figure>
 </section>
 
+<!--  STEP 2  ────────────────────────────────────────── -->
 <section class="section">
-  <h2>🎯 Step 2 — Adaptive Harmonic-LS Refinement</h2>
+  <h2>🎯 Step&nbsp;2 — Adaptive Harmonic-LS Refinement</h2>
+
   <p>
-    Using <code>estimate_omega0</code>
-    <span class="ref">(Elvander&nbsp;&amp;&nbsp;Jakobsson&nbsp;2020)</span>,
-    the search window is iteratively narrowed until its width falls
-    below <code>10⁻¹² rad/s</code>.
+    The initial coarse scan merely shows <em>where</em>
+    the global valley of the residual curve lies.
+    To lock onto the exact minimum we run
+    <code>estimate_omega0</code>
+    <span class="ref">(Elvander &amp; Jakobsson 2020)</span>,
+    which repeats the following loop until the search interval
+    is&nbsp;&lt;&nbsp;<code>10⁻¹²&nbsp;rad/s</code> wide:
   </p>
+
+  <ol>
+    <li><strong>Bracket&nbsp;update</strong><br>
+        Evaluate the cost on a 200-point grid inside the
+        current interval <code>[ω<sub>L</sub>, ω<sub>H</sub>]</code>.</li>
+    <li><strong>Narrowing</strong><br>
+        Keep the best grid point and its two neighbours
+        ⇒ new, shorter interval.</li>
+    <li><strong>Re-grid</strong><br>
+        Switch to a 50-point mesh for faster local convergence.</li>
+  </ol>
+
   <ul>
-    <li><strong>Harmonic order</strong>: K = 8</li>
-    <li><strong>Initial grid</strong>: 200 points → 50-point local refinements</li>
-    <li><strong>Cost metric</strong>: <code>‖x − U(ω)(U(ω)\x)‖²</code></li>
+    <li><strong>Harmonic order</strong>: K&nbsp;= 8</li>
+    <li><strong>Initial interval</strong>: 50 Hz – 400 Hz</li>
+    <li><strong>Cost function</strong>:
+        <code>‖x – U(ω) (U(ω)\x)‖²</code></li>
   </ul>
+
   <pre><code>Refined f0 = 98.205 Hz
-Refined w0 = 617.043 rad/s</code></pre>
+Refined w0 = 617.043 rad/s
+Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
+
+  <p>
+    The refined <code>f₀ / w₀</code> serves as the harmonic
+    baseline for the inharmonicity analysis in Step 3.
+  </p>
 </section>
 
+
 <!-- 4. Inharmonicity analysis ----------------------------------------- -->
+<!--  STEP 3  ────────────────────────────────────────── -->
 <section class="section">
-  <h2>🎻 Step 3 — OMT-prior Joint Estimation of Δ<sub>k</sub></h2>
+  <h2>🎻 Step&nbsp;3 — OMT-prior Joint Estimation&nbsp;of Δ<sub>k</sub></h2>
 
   <p>
-    Allow each harmonic to deviate from the exact grid
-    <code>k · ω₀</code>.
-    The <strong>Optimal Mass Transport&nbsp;(OMT) prior</strong>
-    minimises
+    Real speech is never perfectly harmonic: each partial can shift by a
+    few&nbsp;hertz (<em>jitter</em>, <em>formant-pulling</em>, etc.).
+    We therefore estimate all sinusoidal frequencies
+    <code>ω̂<sub>k</sub></code> <em>and</em> the best overall
+    pitch <code>ω₀</code> by minimising
   </p>
 
   <p class="formula">
-    data-fit&nbsp;cost&nbsp; + 
+    log-likelihood&nbsp;︵data︶ &nbsp;+&nbsp;
     <code>λ&nbsp;·&nbsp;∑<sub>k</sub>|a<sub>k</sub>|² Δ<sub>k</sub>²</code>,
   </p>
 
   <p>
-    with <code>λ = 1 / (2σ<sub>Δ</sub>²)</code> and
-    <code>σ<sub>Δ</sub> = 2 Hz</code>.
-    The starting point is the perfectly harmonic grid
-    <code>k · ω₀<sub>LS</sub></code>.
+    where <code>Δ<sub>k</sub> = ω̂<sub>k</sub> − k ω₀</code>.
+    The second term is the
+    <strong>Optimal Mass Transport (OMT) prior</strong>:
+    each harmonic (mass |a<sub>k</sub>|²) is “transported” to its
+    integer grid position at a quadratic cost.
   </p>
 
+  <h3>Algorithm details</h3>
   <ul>
-    <li><strong>Harmonic order</strong>: 8</li>
-    <li><strong>Jitter prior</strong>: σ<sub>Δ</sub> = 2 Hz</li>
-    <li><strong>Solver</strong>: Nelder–Mead (<code>fminsearch</code>)</li>
+    <li><strong>σ<sub>Δ</sub> = 2 Hz</strong> ⇒ λ = 1 ⁄ (2σ<sub>Δ</sub>²)</li>
+    <li><strong>Initial frequencies</strong>:
+        the perfectly harmonic grid k·ω₀<sub>LS</sub></li>
+    <li><strong>Optimiser</strong>:
+        Nelder–Mead over&nbsp;3K parameters
+        <code>[ω̂, Re{a}, Im{a}]</code></li>
   </ul>
+
+  <!-- numeric results already present below; keep them -->
+</section>
+
 
   <!-- numeric results table -->
   <h3>🔢 Numerical results</h3>
