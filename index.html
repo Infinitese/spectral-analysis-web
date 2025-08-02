@@ -381,6 +381,71 @@ Per-harmonic statistics (Hz)
   </details>
 </section>
 
+
+<!-- ==================================================================== -->
+<section class="divider-section">
+  <h2 class="divider-title">Across-Recording &amp; Across-Speaker Summary</h2>
+</section>
+
+<section class="section">
+  <h3>📊 Per-Speaker Summary Table</h3>
+  <p>
+    For each harmonic index <code>k</code> (rows 1 – 8) we report:
+    <ul>
+      <li><code>μ<sub>spk<i>n</i></sub></code> – mean offset
+          <code>Δ<sub>k</sub></code> (Hz) averaged over all recordings
+          of speaker <em>n</em>.</li>
+      <li><code>SD<sub>rec_spk<i>n</i></sub></code> – within-speaker
+          standard deviation of <code>Δ<sub>k</sub></code>
+          across that speaker’s recordings.  
+          It captures <em>intra-speaker</em> variability.</li>
+    </ul>
+  </p>
+
+  <pre class="result-block">
+k   μ_spk1   SDrec_spk1   μ_spk2   SDrec_spk2   μ_spk3   SDrec_spk3
+-------------------------------------------------------------------
+1   3.6786     3.0193     0.3993     0.6963     -0.1096     1.0101
+2   4.0347     3.4948     0.7806     3.0569      0.4869     0.7744
+3  -2.9694     2.8742    -2.0519     0.8076     -1.2760     4.6265
+4   4.8555     4.2508    -0.1398     1.7007      0.2078     0.6943
+5   2.2493     3.5137    -3.2077     3.0201      2.5803     2.9715
+6   2.4613     4.3686    -2.2537     2.7328     -0.9323     0.9221
+7  -3.1748     3.1321     3.4347     6.6808      0.5584     1.6450
+8  -1.5673     2.1176    18.2900    14.6190      2.5191     4.3416
+  </pre>
+</section>
+
+<section class="section">
+  <h3>🌐 Overall Summary Table</h3>
+  <p>
+    Collapsing the three speakers we compute:
+    <ul>
+      <li><code>μ̄<sub>k</sub></code> – grand mean of
+          <code>Δ<sub>k</sub></code> over <em>all</em> recordings
+          (i.e.&nbsp;averaged first within, then across speakers).</li>
+      <li><code>SD<sub>rec_mean</sub></code> – mean of
+          within-speaker SDs (<code>SD<sub>rec</sub></code>)
+          ⇒ typical <em>record-to-record</em> fluctuation.</li>
+      <li><code>SD<sub>spk</sub></code> – standard deviation of the three
+          speaker means ⇒ <em>inter-speaker</em> spread.</li>
+    </ul>
+  </p>
+
+  <pre class="result-block">
+k   μ̄_k    SD_rec_mean   SD_spk
+-------------------------------
+1  1.3227     1.5753     2.0560
+2  1.7674     2.4420     1.9691
+3 -2.0991     2.7694     0.8477
+4  1.6412     2.2153     2.7891
+5  0.5407     3.1684     3.2504
+6 -0.2415     2.6745     2.4322
+7  0.2728     3.1893     3.3134
+8  6.4138     7.0260    10.4860
+  </pre>
+</section>
+
   
 </body>
 </html>
