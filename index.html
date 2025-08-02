@@ -1,83 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Inharmonicity Analysis </title>
+  <meta charset="UTF-8" />
+  <title>Inharmonicity Analysis</title>
 
-<!-- ───── Global Styles ───── -->
-<style>
-  :root {
-    --bg:      #f9f9f9;
-    --fg:      #333;
-    --accent:  #2c3e50;
-    --code-bg: #eee;
-    --border:  #bbb;
-  }
+  <!-- ───── Global Styles ───── -->
+  <style>
+    :root {
+      --bg:      #f9f9f9;
+      --fg:      #333;
+      --accent:  #2c3e50;
+      --code-bg: #eee;
+      --border:  #bbb;
+    }
 
-  /* base */
-  body         { font-family: Arial, sans-serif; background: var(--bg); color: var(--fg); margin: 2rem; line-height: 1.6; }
-  h1, h2, h3   { color: var(--accent); margin-top: 1.4rem; margin-bottom: .6rem; }
-  h1           { font-size: 2rem; }
-  h2           { font-size: 1.4rem; }
-  h3           { font-size: 1.15rem; }
-  p            { margin: .5rem 0 1rem; }
-  .section     { margin-bottom: 2.2rem; }
-  code, pre    { background: var(--code-bg); font-family: "Courier New", monospace; }
-  code         { padding: 2px 4px; font-size: 90%; border-radius: 4px; }
-  pre          { padding: .75rem 1rem; overflow-x: auto; border-radius: 6px; }
+    /* base */
+    body         { font-family: Arial, sans-serif; background: var(--bg); color: var(--fg); margin: 2rem; line-height: 1.6; }
+    h1, h2, h3   { color: var(--accent); margin-top: 1.4rem; margin-bottom: .6rem; }
+    h1           { font-size: 2rem; }
+    h2           { font-size: 1.4rem; }
+    h3           { font-size: 1.15rem; }
+    p            { margin: .5rem 0 1rem; }
+    .section     { margin-bottom: 2.2rem; }
+    code, pre    { background: var(--code-bg); font-family: "Courier New", monospace; }
+    code         { padding: 2px 4px; font-size: 90%; border-radius: 4px; }
+    pre          { padding: .75rem 1rem; overflow-x: auto; border-radius: 6px; }
 
-  /* media */
-  img          { max-width: 620px; border: 1px solid #ccc; margin-bottom: 1.2rem; }
-  audio        { margin: .3rem 0 1.2rem; width: 100%; max-width: 400px; }
+    /* media */
+    img          { max-width: 620px; border: 1px solid #ccc; margin-bottom: 1.2rem; }
+    audio        { margin: .3rem 0 1.2rem; width: 100%; max-width: 400px; }
 
-  /* numeric table */
-  .num-table      { border-collapse: collapse; margin: .5rem 0 1.2rem; }
-  .num-table th,
-  .num-table td   { border: 1px solid var(--border); padding: .25rem .6rem; text-align: right; }
-  .num-table th   { background: #f2f2f2; }
-  .num-table td:first-child,
-  .num-table th:first-child { text-align: center; }
+    /* numeric table */
+    .num-table      { border-collapse: collapse; margin: .5rem 0 1.2rem; }
+    .num-table th,
+    .num-table td   { border: 1px solid var(--border); padding: .25rem .6rem; text-align: right; }
+    .num-table th   { background: #f2f2f2; }
+    .num-table td:first-child,
+    .num-table th:first-child { text-align: center; }
 
-  /* simple call-outs */
-  .formula    { margin: .6rem 0 .8rem; font-style: italic; }
-  figure      { margin: .8rem 0 1.6rem; text-align: center; }
-  figcaption  { font-size: 0.9rem; color: #666; margin-top: .4rem; }
-</style>
+    /* simple call-outs */
+    .formula    { margin: .6rem 0 .8rem; font-style: italic; }
+    figure      { margin: .8rem 0 1.6rem; text-align: center; }
+    figcaption  { font-size: 0.9rem; color: #666; margin-top: .4rem; }
+
+    /* divider title */
+    .divider-section {
+      text-align: center;
+      margin: 3em 0 2.5em;
+    }
+
+    .divider-title {
+      display: inline-block;
+      position: relative;
+      font-size: 1.8em;
+      padding: 0.5em 1em;
+      background: var(--bg);
+      color: var(--accent);
+    }
+
+    .divider-title::before,
+    .divider-title::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 50px;
+      height: 1px;
+      background: #ccc;
+    }
+
+    .divider-title::before {
+      right: 100%;
+      margin-right: 20px;
+    }
+
+    .divider-title::after {
+      left: 100%;
+      margin-left: 20px;
+    }
+  </style>
 </head>
 
 <body>
-<h1>Inharmonicity Analysis</h1>
+  <h1>Inharmonicity Analysis</h1>
 
-<!-- 0. Overview -------------------------------------------------------- -->
-<section class="section">
-  <h2>🔍 Project Overview</h2>
-  <p>
-    This page is just a start point by analysing a simple frame of vowel voice (<em>“ah”</em>) and estimate the fundamental frequency
-    (<code>f₀</code>) and measure harmonic inharmonicity.(<code>Δ<sub>k</sub></code>) 
-  </p>
-</section>
+  <!-- 0. Overview -------------------------------------------------------- -->
+  <section class="section">
+    <h2>🔍 Project Overview</h2>
+    <p>
+      This page is just a start point by analysing a simple frame of vowel voice (<em>“ah”</em>) and estimate the fundamental frequency
+      (<code>f₀</code>) and measure harmonic inharmonicity (<code>Δ<sub>k</sub></code>).
+    </p>
+  </section>
 
-<!-- 1. Audio ----------------------------------------------------------- -->
-<section class="section">
-  <h2>🎧 Audio Sample</h2>
-  <audio controls>
-    <source src="A_PM66PSO5_a_190303153700.wav" type="audio/wav" />
-    Your browser does not support the audio element.
-  </audio>
-</section>
+  <!-- 1. Audio ----------------------------------------------------------- -->
+  <section class="section">
+    <h2>🎧 Audio Sample</h2>
+    <audio controls>
+      <source src="A_PM66PSO5_a_190303153700.wav" type="audio/wav" />
+      Your browser does not support the audio element.
+    </audio>
+  </section>
 
+  <!-- Divider Title ----------------------------------------------------- -->
+  <section class="divider-section">
+    <h2 class="divider-title">Exploratory Analysis of a 20 ms Frame</h2>
+  </section>
 
-<section class="section">
-  <h2 class="divider-title">Exploratory Analysis of a 20 ms Frame</h2>
-</section>
-
-  
-<!-- 2. Waveforms ------------------------------------------------------- -->
-<section class="section">
-  <h2>📈 Waveform of the 20 ms Frame</h2>
-  <p>The extracted 20 ms frame (starting at 1 s):</p>
-  <img src="extracted20ms.png" alt="20 ms frame waveform" />
-</section>
+  <!-- 2. Waveforms ------------------------------------------------------- -->
+  <section class="section">
+    <h2>📈 Waveform of the 20 ms Frame</h2>
+    <p>The extracted 20 ms frame (starting at 1 s):</p>
+    <img src="extracted20ms.png" alt="20 ms frame waveform" />
+  </section>
 
 <section class="section">
   <h2>🧭 Frame Position in the Full Signal</h2>
