@@ -77,6 +77,14 @@
       left: 100%;
       margin-left: 20px;
     }
+    .result-block {
+      background: var(--code-bg);
+      font-family: "Courier New", monospace;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      white-space: pre;          /* 保留空格缩进 */
+      margin: 0.5rem 0 1.2rem;
+    }
   </style>
 </head>
 
@@ -283,8 +291,81 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   <h2 class="divider-title">Sliding Window Analysis of Multiple Audios</h2>
 </section>
 
+<section class="divider-section">
+  <h2 class="divider-title">Sliding Window Analysis of Multiple Utterances</h2>
+</section>
 
+<section class="section">
+  <h3>📝 Method Recap</h3>
+  <p>
+    For each recording we slide a <strong>20&nbsp;ms frame</strong> with a
+    <strong>10&nbsp;ms hop</strong>.  Each frame’s fundamental frequency
+    (<code>f₀</code>) and inharmonic offsets
+    (<code>Δ<sub>k</sub></code>,&nbsp;k = 1‒8) are estimated via the
+    OMT-based routine established earlier.
+    After discarding unvoiced or abnormal frames (<em>f₀</em> &lt; 80 Hz
+    or &gt; 300 Hz), we summarise every recording by the mean and standard
+    deviation of each <code>Δ<sub>k</sub></code>.  Below are the raw
+    statistics per recording.
+  </p>
+</section>
 
+<!-- Speaker 1 ========================================================= -->
+<section class="section">
+  <h3>🗣️ Speaker&nbsp;1 &nbsp;|&nbsp; 10 recordings</h3>
+
+  <!-- 示例：只展示第 1 条，其余可复制粘贴 -->
+  <details open>
+    <summary>Recording&nbsp;1 &nbsp;(<code>Recording1.wav</code>)</summary>
+    <pre class="result-block">
+Valid voiced frames : 212
+Mean f0 (OMT)       : 88.23 ± 3.13  Hz
+Per-harmonic statistics (Hz)
+ k |  mean |  std
+---+-------+------
+ 1 |  7.59 |  5.91
+ 2 |  5.81 | 16.92
+ 3 | -6.31 | 24.56
+ 4 | -4.48 | 26.80
+ 5 |  2.97 | 17.62
+ 6 |  2.07 | 15.52
+ 7 | -1.50 |  7.30
+ 8 |  0.71 | 15.12
+    </pre>
+  </details>
+
+  <!-- 折叠块模板，可复制 9 次并替换内容 -->
+  <!--
+  <details>
+    <summary>Recording&nbsp;2 &nbsp;(<code>Recording2.wav</code>)</summary>
+    <pre class="result-block">…粘贴 Δ 表格…</pre>
+  </details>
+  -->
+</section>
+
+<!-- Speaker 2 ========================================================= -->
+<section class="section">
+  <h3>🗣️ Speaker&nbsp;2 &nbsp;|&nbsp; 3 recordings</h3>
+
+  <details open>
+    <summary>Recording&nbsp;1</summary>
+    <pre class="result-block">…粘贴 Δ 表格…</pre>
+  </details>
+  <!-- Recording 2 / 3 同理 -->
+</section>
+
+<!-- Speaker 3 ========================================================= -->
+<section class="section">
+  <h3>🗣️ Speaker&nbsp;3 &nbsp;|&nbsp; 3 recordings</h3>
+
+  <details open>
+    <summary>Recording&nbsp;1</summary>
+    <pre class="result-block">…粘贴 Δ 表格…</pre>
+  </details>
+  <!-- Recording 2 / 3 同理 -->
+</section>
+
+  
 </body>
 </html>
 
