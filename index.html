@@ -291,78 +291,94 @@ Iterations  = 5 (≈ 7 ms on a laptop)</code></pre>
   <h2 class="divider-title">Sliding Window Analysis of Multiple Audios</h2>
 </section>
 
-<section class="divider-section">
-  <h2 class="divider-title">Sliding Window Analysis of Multiple Utterances</h2>
-</section>
+<!-- Sliding Window Analysis ==================================================== -->
+
 
 <section class="section">
   <h3>📝 Method Recap</h3>
   <p>
     For each recording we slide a <strong>20&nbsp;ms frame</strong> with a
-    <strong>10&nbsp;ms hop</strong>.  Each frame’s fundamental frequency
+    <strong>10&nbsp;ms hop</strong>. Each frame’s fundamental frequency
     (<code>f₀</code>) and inharmonic offsets
-    (<code>Δ<sub>k</sub></code>,&nbsp;k = 1‒8) are estimated via the
-    OMT-based routine established earlier.
-    After discarding unvoiced or abnormal frames (<em>f₀</em> &lt; 80 Hz
-    or &gt; 300 Hz), we summarise every recording by the mean and standard
-    deviation of each <code>Δ<sub>k</sub></code>.  Below are the raw
-    statistics per recording.
+    (<code>Δ<sub>k</sub></code>, k = 1–8) are estimated via the
+    OMT-based routine established earlier. After discarding unvoiced or
+    abnormal frames (<em>f₀</em> &lt; 80 Hz or &gt; 300 Hz), we summarize
+    every recording by the mean and standard deviation of each
+    <code>Δ<sub>k</sub></code>.
   </p>
+</section>
+
+<section class="section">
+  <p><em>For brevity, only the first recording per speaker is shown below.</em></p>
 </section>
 
 <!-- Speaker 1 ========================================================= -->
 <section class="section">
-  <h3>🗣️ Speaker&nbsp;1 &nbsp;|&nbsp; 10 recordings</h3>
-
-  <!-- 示例：只展示第 1 条，其余可复制粘贴 -->
+  <h3>🗣️ Speaker 1 | 10 recordings</h3>
   <details open>
-    <summary>Recording&nbsp;1 &nbsp;(<code>Recording1.wav</code>)</summary>
+    <summary>Recording 1 (<code>Recording1.wav</code>)</summary>
     <pre class="result-block">
 Valid voiced frames : 212
-Mean f0 (OMT)       : 88.23 ± 3.13  Hz
+Mean f0 (OMT)       :  88.23 ±  3.13  Hz
 Per-harmonic statistics (Hz)
- k |  mean |  std
----+-------+------
- 1 |  7.59 |  5.91
- 2 |  5.81 | 16.92
- 3 | -6.31 | 24.56
- 4 | -4.48 | 26.80
- 5 |  2.97 | 17.62
- 6 |  2.07 | 15.52
- 7 | -1.50 |  7.30
- 8 |  0.71 | 15.12
+ k |  mean  |   std
+---+--------+--------
+ 1 |   7.59 |   5.91
+ 2 |   5.81 |  16.92
+ 3 |  -6.31 |  24.56
+ 4 |  -4.48 |  26.80
+ 5 |   2.97 |  17.62
+ 6 |   2.07 |  15.52
+ 7 |  -1.50 |   7.30
+ 8 |   0.71 |  15.12
     </pre>
   </details>
-
-  <!-- 折叠块模板，可复制 9 次并替换内容 -->
-  <!--
-  <details>
-    <summary>Recording&nbsp;2 &nbsp;(<code>Recording2.wav</code>)</summary>
-    <pre class="result-block">…粘贴 Δ 表格…</pre>
-  </details>
-  -->
 </section>
 
 <!-- Speaker 2 ========================================================= -->
 <section class="section">
-  <h3>🗣️ Speaker&nbsp;2 &nbsp;|&nbsp; 3 recordings</h3>
-
+  <h3>🗣️ Speaker 2 | 3 recordings</h3>
   <details open>
-    <summary>Recording&nbsp;1</summary>
-    <pre class="result-block">…粘贴 Δ 表格…</pre>
+    <summary>Recording 1 (<code>Recording1.wav</code>)</summary>
+    <pre class="result-block">
+Valid voiced frames : 271
+Mean f0 (OMT)       : 139.05 ±  1.18  Hz
+Per-harmonic statistics (Hz)
+ k |  mean  |   std
+---+--------+--------
+ 1 |  -0.22 |   3.44
+ 2 |   1.73 |   7.71
+ 3 |  -2.71 |  14.99
+ 4 |  -2.10 |  32.61
+ 5 |  -0.75 |   9.03
+ 6 |  -1.49 |  13.90
+ 7 |  11.15 | 114.17
+ 8 |  14.53 | 163.79
+    </pre>
   </details>
-  <!-- Recording 2 / 3 同理 -->
 </section>
 
 <!-- Speaker 3 ========================================================= -->
 <section class="section">
-  <h3>🗣️ Speaker&nbsp;3 &nbsp;|&nbsp; 3 recordings</h3>
-
+  <h3>🗣️ Speaker 3 | 3 recordings</h3>
   <details open>
-    <summary>Recording&nbsp;1</summary>
-    <pre class="result-block">…粘贴 Δ 表格…</pre>
+    <summary>Recording 1 (<code>Recording1.wav</code>)</summary>
+    <pre class="result-block">
+Valid voiced frames : 255
+Mean f0 (OMT)       : 177.51 ±  0.86  Hz
+Per-harmonic statistics (Hz)
+ k |  mean  |   std
+---+--------+--------
+ 1 |   0.13 |   3.10
+ 2 |   0.54 |  13.50
+ 3 |  -0.26 |  10.00
+ 4 |   0.07 |   1.11
+ 5 |   5.96 |  18.15
+ 6 |  -1.03 |   5.85
+ 7 |   0.80 |   9.08
+ 8 |   5.83 |  62.08
+    </pre>
   </details>
-  <!-- Recording 2 / 3 同理 -->
 </section>
 
   
