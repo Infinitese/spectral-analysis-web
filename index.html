@@ -543,8 +543,29 @@ k   μ̄_k    SD_rec_mean   SD_spk
   </p>
 </section>
 
+<!-- =============================================================== -->
+<section class="divider-section">
+  <h2 class="divider-title">Variance-Homogeneity Test for Δ<sub>k</sub></h2>
+</section>
 
-  
+<section class="section">
+  <p>
+    In previous sections, we observed that the stability of offset metrics (Δ<sub>k</sub>) can vary by harmonic order,
+    especially in the higher harmonics. But are these differences in variability statistically significant?
+    To answer this, we test whether the frame-level variance of Δ<sub>k</sub> remains consistent across all 8 harmonic indices.
+  </p>
+  <p>
+    Since each individual recording only has a limited number of frames, we concatenate all recordings for each speaker.
+    This gives us over <strong>1000 frame-level Δ<sub>k</sub> observations</strong> per speaker — sufficient to perform classical
+    homogeneity of variance tests like <strong>Bartlett’s test</strong> and the more robust <strong>Levene’s test</strong>.
+  </p>
+  <p>
+    The statistical null hypothesis (H<sub>0</sub>) for each speaker is:
+    <br>
+    <em>“The variance of Δ<sub>k</sub> is constant across all harmonic indices k = 1 to 8.”</em>
+  </p>
+</section>
+
 </body>
 </html>
 
