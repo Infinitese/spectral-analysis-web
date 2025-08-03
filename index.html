@@ -506,26 +506,43 @@ k   μ̄_k    SD_rec_mean   SD_spk
 
 <!-- ──────────────────────────────────────────────────────────────────── -->
 <section class="section">
-  <h4>③ Within-speaker jitter distribution (k = 1–4)</h4>
+  <h4>③  Within-speaker jitter across harmonics (k = 1–4)</h4>
   <p>
-    Boxplots reveal record-to-record σ<sub>k</sub> spread for each speaker.
+    For each speaker we plot one box per harmonic (<strong>k = 1–4</strong>).
+    A box summarises the distribution of σ<sub>k</sub> taken across that
+    speaker’s multiple recordings, therefore illustrating <em>how unstable
+    each harmonic is for that talker</em>.
+    The x-axis is the harmonic index <code>k</code>, not the recording ID.
   </p>
 
   <img src="3speakers boxchart.png"
-       alt="Boxplots of σ_k (k=1–4) per recording, per speaker"
+       alt="Boxplots of σ_k (k=1–4) per speaker"
        style="max-width: 940px; border: 1px solid #bbb; margin-bottom: 1rem;" />
 
   <p><strong>Key observations</strong>:</p>
   <ul>
-    <li><b>Speaker 1</b>: Recording 4 shows σ up to 48 Hz → likely poor
-        vocal control or background noise.</li>
-    <li><b>Speakers 2 & 3</b>: Each拥有 both “clean” (σ &lt; 5 Hz) and
-        “noisy” (> 20 Hz) takes, underscoring session variability.</li>
+    <li><b>k = 1–2</b>: All speakers remain relatively stable
+        (σ&nbsp;&lt;&nbsp;10 Hz), indicating low-order harmonics are least
+        affected by recording variability.</li>
+
+    <li><b>k = 3</b>: Variability starts to diverge—Speaker 1 already exceeds
+        15 Hz, while Speakers 2&nbsp;and 3 stay below that threshold.</li>
+
+    <li><b>k = 4</b>: Jitter spikes for everyone, but most dramatically
+        for <b>Speaker 1</b> (whisker&nbsp;&gt;&nbsp;48 Hz) and
+        <b>Speaker 2</b> (median&nbsp;≈ 30 Hz).  This confirms that the 4-th
+        harmonic is intrinsically more sensitive to vocal or environmental
+        fluctuations.</li>
   </ul>
-  <p><em>Conclusion:</em> Low-order jitter is highly <b>record-dependent</b>;
-  ensuring consistent recording conditions is crucial before attributing
-  offsets to speaker physiology.</p>
+
+  <p>
+    <em>Conclusion:</em> Low-order jitter is harmonic-dependent: while
+    k = 1–2 are uniformly stable, k = 4 becomes highly volatile, with Speaker
+    differences amplified.  Before attributing offsets to physiology, the
+    4-th harmonic demands stricter recording control or additional smoothing.
+  </p>
 </section>
+
 
   
 </body>
