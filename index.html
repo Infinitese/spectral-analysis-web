@@ -446,6 +446,87 @@ k   μ̄_k    SD_rec_mean   SD_spk
   </pre>
 </section>
 
+<!-- ==================================================================== -->
+<section class="section">
+  <h3>📊 Visual Comparison of Offset Metrics</h3>
+  <p>
+    The three visuals below summarise how each speaker’s inharmonic offsets
+    behave in terms of <em>direction</em> (mean&nbsp;μ<sub>k</sub>) and
+    <em>stability</em> (standard deviation&nbsp;σ<sub>k</sub> / within-recording
+    jitter).  Scroll through the panels for a step-by-step interpretation.
+  </p>
+</section>
+
+<!-- ──────────────────────────────────────────────────────────────────── -->
+<section class="section">
+  <h4>① Mean deviation&nbsp;μ<sub>k</sub> across speakers</h4>
+  <p>
+    Positive values indicate upward shifts from perfect harmonics;
+    negatives indicate downward shifts.
+  </p>
+
+  <img src="mu_comparison.png"
+       alt="Line chart comparing μ_k for three speakers"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <p><strong>Key observations</strong>:</p>
+  <ul>
+    <li><b>k = 1–2</b>: Speaker&nbsp;1 ≈ +4 Hz, Speakers 2–3 ≈ +1 Hz → low-order
+        harmonics separate Spk1 from the others.</li>
+    <li><b>k = 3</b>: All speakers drop ≈ –2 Hz → shared inharmonicity trend.</li>
+    <li><b>k = 8</b>: Speaker 2 reaches +18 Hz → high-order harmonic highlights
+        a speaker-specific trait.</li>
+  </ul>
+  <p><em>Conclusion:</em> Only the bottom two and top one harmonics provide clear
+  speaker discrimination; mid-band harmonics show little systematic ranking.</p>
+</section>
+
+<!-- ──────────────────────────────────────────────────────────────────── -->
+<section class="section">
+  <h4>② Variability&nbsp;σ<sub>k</sub> (offset SD) across speakers</h4>
+  <p>
+    σ<sub>k</sub> measures <em>how much</em> the offset fluctuates within a
+    speaker’s recordings.
+  </p>
+
+  <img src="sigma_comparison.png"
+       alt="Line chart comparing σ_k (offset SD) for three speakers"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <p><strong>Key observations</strong>:</p>
+  <ul>
+    <li><b>k = 1–4</b>: All speakers stable (σ ≈ 2–5 Hz).</li>
+    <li><b>k = 6–7</b>: Small divergence, but still &lt; 4 Hz.</li>
+    <li><b>k = 8</b>: Speaker 2 σ₈ ≈ 15 Hz ≫ others → high-order harmonic
+        both biased <em>and</em> unstable for Spk2.</li>
+  </ul>
+  <p><em>Conclusion:</em> Stability is largely recording-driven except at the
+  8-th harmonic, where speaker identity dominates.</p>
+</section>
+
+<!-- ──────────────────────────────────────────────────────────────────── -->
+<section class="section">
+  <h4>③ Within-speaker jitter distribution (k = 1–4)</h4>
+  <p>
+    Boxplots reveal record-to-record σ<sub>k</sub> spread for each speaker.
+  </p>
+
+  <img src="jitter_boxcharts.png"
+       alt="Boxplots of σ_k (k=1–4) per recording, per speaker"
+       style="max-width: 940px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <p><strong>Key observations</strong>:</p>
+  <ul>
+    <li><b>Speaker 1</b>: Recording 4 shows σ up to 48 Hz → likely poor
+        vocal control or background noise.</li>
+    <li><b>Speakers 2 & 3</b>: Each拥有 both “clean” (σ &lt; 5 Hz) and
+        “noisy” (> 20 Hz) takes, underscoring session variability.</li>
+  </ul>
+  <p><em>Conclusion:</em> Low-order jitter is highly <b>record-dependent</b>;
+  ensuring consistent recording conditions is crucial before attributing
+  offsets to speaker physiology.</p>
+</section>
+
   
 </body>
 </html>
