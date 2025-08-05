@@ -592,6 +592,56 @@ k   μ̄_k    SD_rec_mean   SD_spk
   </p>
 </section>
 
+  
+<section class="section">
+  <h3>📈 Distribution Fitting of Δ<sub>k</sub> for spk1 and spk3</h3>
+
+  <img src="fit_spk1.png"
+       alt="Histogram and fitted t/normal distributions for spk1"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <img src="fit_spk3.png"
+       alt="Histogram and fitted t/normal distributions for spk3"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <p>
+    The above plots show the histogram of Δ<sub>k</sub> values for <strong>spk1</strong> and <strong>spk3</strong>, overlaid with fitted probability density functions of the <strong>t-distribution</strong> (red solid) and the <strong>normal distribution</strong> (blue dashed).
+    <br><br>
+    From visual inspection:
+    <ul>
+      <li>For <strong>spk1</strong>, the t-distribution fits the data tightly, especially around the peak and the heavy tails.</li>
+      <li>For <strong>spk3</strong>, although the data is slightly skewed, the t-distribution still outperforms the normal in capturing the kurtosis and tail behavior.</li>
+    </ul>
+    These results suggest that both speakers' Δ<sub>k</sub> values can be reasonably modeled using a t-distribution.
+  </p>
+</section>
+
+<section class="section">
+  <h3>🧪 Goodness-of-Fit Testing and Hypothesis Evaluation</h3>
+
+  <p>
+    To statistically evaluate the fit of the t-distribution and normal distribution, we performed both the <strong>Kolmogorov-Smirnov (KS)</strong> test and the <strong>Anderson-Darling (AD)</strong> test.
+  </p>
+
+  <h4>spk1 results:</h4>
+  <ul>
+    <li><strong>t-distribution</strong>: KS p = 0.2653 → <em>Do not reject H₀</em>; AD p = 0.0800 → <em>Do not reject H₀</em></li>
+    <li><strong>Normal distribution</strong>: KS p = 0.0000 → <em>Reject H₀</em>; AD p = 0.0000 → <em>Reject H₀</em></li>
+  </ul>
+
+  <h4>spk3 results:</h4>
+  <ul>
+    <li><strong>t-distribution</strong>: KS p = 0.1292 → <em>Do not reject H₀</em>; AD p = 0.0231 → <em>Reject H₀ (slightly)</em></li>
+    <li><strong>Normal distribution</strong>: KS p = 0.0002 → <em>Reject H₀</em>; AD p = 0.0002 → <em>Reject H₀</em></li>
+  </ul>
+
+  <p>
+    <strong>Conclusion:</strong><br>
+    For <strong>spk1</strong>, both KS and AD tests confirm that the data follows a t-distribution and reject the normal distribution.<br>
+    For <strong>spk3</strong>, the KS test supports the t-distribution while the AD test is more conservative and slightly rejects it. Nonetheless, the t-distribution still performs better than the normal distribution based on visual fit and AIC score.
+  </p>
+</section>
+
 </body>
 </html>
 
