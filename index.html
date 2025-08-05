@@ -568,6 +568,30 @@ k   μ̄_k    SD_rec_mean   SD_spk
   </p>
 </section>
 
+<!-- ===== Scatter plots (images) for Δk by speaker ===== -->
+<section class="section">
+  <h3>Scatter plots of Δ<sub>k</sub> (per frame) for three speakers</h3>
+
+  <img src="spk1_k1.png"
+       alt="Scatter plot of Δk vs frame index for spk1"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <img src="spk2_k1.png"
+       alt="Scatter plot of Δk vs frame index for spk2"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <img src="spk3_k1.png"
+       alt="Scatter plot of Δk vs frame index for spk3"
+       style="max-width: 720px; border: 1px solid #bbb; margin-bottom: 1rem;" />
+
+  <p>
+    From the scatter plots, <strong>spk1</strong> and <strong>spk3</strong> look relatively stable across frames.
+    In contrast, <strong>spk2</strong> shows a pronounced deviation in the middle segment, which likely stems from
+    an anomalous recording. To avoid bias, we will temporarily exclude <strong>spk2</strong> and build models using
+    <strong>spk1</strong> and <strong>spk3</strong> only.
+  </p>
+</section>
+
 </body>
 </html>
 
